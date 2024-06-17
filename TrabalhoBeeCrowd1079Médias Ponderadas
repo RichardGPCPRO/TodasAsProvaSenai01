@@ -1,0 +1,18 @@
+#include <stdio.h>
+
+int main() {
+    int N;
+    scanf("%d", &N); 
+
+    int i;
+    double valor1, valor2, valor3, media;
+
+    for (i = 0; i < N; i++) {
+        scanf("%lf %lf %lf", &valor1, &valor2, &valor3);
+
+        media = (valor1 * 2 + valor2 * 3 + valor3 * 5) / 10.0;
+        printf("%.1lf\n", media);
+    }
+
+    return 0;
+}
