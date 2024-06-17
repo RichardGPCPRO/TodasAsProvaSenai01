@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+int main() {
+    int x, m, n;
+    scanf("%d", &x);
+
+    for (int i = 0; i < x; i++) {
+        scanf("%d %d", &m, &n);
+        int cont = 0;
+
+
+        int menor = m < n ? m : n;
+        int maior = m > n ? m : n;
+
+        for (int l = menor + 1; l < maior; l++) {
+            if (l % 2 != 0) {
+                cont += l;
+            }
+        }
+
+        printf("%d\n", cont);
+    }
+
+    return 0;
+}
