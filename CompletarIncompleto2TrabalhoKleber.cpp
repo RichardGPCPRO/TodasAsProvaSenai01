@@ -1,96 +1,161 @@
-double div(double num1, double num2){
+#include<stdio.h>
+#include<locale.h>
+struct cliente{
+	int cpf;
+char nascimento[50]; };
 
-double resultado;
+struct cliente clientes [200];
 
-resultado=num1/num2;
+int codigo=0;
 
-return resultado;
+void vender Ingresso(){
 
-{
+system("cls");
 
-int main(){
+fflush(stdin);
 
-int op;
+gets(clientes[codigo].nome);
 
-double num1, num2;
+printf("\nDigite o CPF: ");
+
+scanf("%i",&clientes [codigo].cpf);
+
+printf("\nDigite a data de nascimento: ");
+
+fflush(stdin);
+
+gets(clientes [codigo].nascimento);
+
+printf("\nIngresso vendido!\n");
+
+system("pause");
+
+}
+
+void listarIngresso(){
+
+system("cls");
+
+int x;
+
+printf("\n******************\n");
+
+printf("\nNome: %s", clientes [x].nome);
+
+printf("\nCPF: %i", clientes [x].cpf);
+
+printf("\nData Nascimento:
+
+%s\n", clientes[x].nascimento);
+
+}
+
+system("pause");
+
+}
+
+void validarIngresso(){ system("cls");
+int busca,x;
+
+printf("\nDigite o CPF da busca: ");
+
+scanf("%1",&busca);
+
+for(x=0;x<codigo; x++){
+
+if(busca==clientes[x].cpf){
+
+printf("\n*********\n");
+
+printf("\nNome: %s", clientes[x].nome); printf("\nCPF: %i", clientes[x].cpf);
+
+printf("\nNascimento:
+
+%s\n", clientes[x].nascimento);
+
+achou=1;
+
+system("pause");
+
+break;
+
+}else{
+
+achou=0;
+
+}
+
+}
+
+if(achou==0) {
+
+printf("\nCadastro não encontrado\n");
+
+}
+
+}
+
+void menu(){
+
+printf("\na) vender ingressos");
+
+printf("\nc) validar ingressos");
+
+printf("\nd)- sair");
+
+printf("\nopção: ");
+
+}
+
+int main(){ setlocale(LC_ALL, "Portuguese");
+
+char op;
 
 do{
 
-printf("\nDigite dois valores: ");
+system("cls");
 
-scanf("%lf %f", &num1, &num2);
+menu();
 
-printf("\nSelecione a operacao:");
+fflush(stdin);
 
-printf("\n1- soma\n2 sub\n3- multi\n4
-
-div\n- sain");
-
-printf("\nopcao: ");
-
-scanf("%i",&op);
+scanf("%c",&op);
 
 switch(op){
 
-case 1:
+case 'a':
 
-printf("Resultado:
-
-%.21f\n", soma(num1, num2));
+vender Ingresso();
 
 break;
 
-case 2:
+case 'b':
 
-printf("Resultado:
+listarIngresso();
 
-%.21f\n", sub(num1, num2));
+break;
+
+case 'c':
+
+break;
+
+case 'd':
+
+printf("\nsaindo!\n");
 
 system("pause");
 
 break;
 
-case 3:
+default:
 
-printf("Resultado:
-
-%.21f\n",multi(num1, num2));
+printf("\nopção inválida\n");
 
 system("pause");
-
-break;
-case 4:
-
-printf("Resultado:
-
-%.21f\n",div(num1, num2));
-
-} else {
-
-printf("Erro: Divis�o por zero
-
-n�o � permitida.\n");
 
 }
 
-system("pause");
-
-break;
-
-case 0:
-
-printf("\nEncerrando a
-
-aplicacao\n");
-
-break;
-
-default: printf("\nopcao invalida!\n");
-
-}
-
-}while(op!=0);
+}while(op!='d');
 
 return 0;
 
-}
