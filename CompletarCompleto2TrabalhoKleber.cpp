@@ -1,68 +1,119 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h> //tipo de dados booleano
+#include<stdio.h>
+#include<locale.h>
+#include<string.h> // Para usar a funÃ§Ã£o fgets
 
-//funções de operações matemáticas
-double soma(double num1, double num2) {
-    return num1 + num2;
+struct cliente {
+    int cpf;
+    char nome[50];
+    char nascimento[50];
+};
+
+struct cliente clientes[200];
+int codigo = 0;
+
+void venderIngresso() {
+    system("cls");
+
+    fflush(stdin);
+
+    printf("\nDigite o nome: ");
+    fgets(clientes[codigo].nome, 50, stdin);
+
+    printf("\nDigite o CPF: ");
+    scanf("%d", &clientes[codigo].cpf);
+
+    printf("\nDigite a data de nascimento: ");
+    fflush(stdin);
+    fgets(clientes[codigo].nascimento, 50, stdin);
+
+    printf("\nIngresso vendido!\n");
+
+    system("pause");
 }
 
-double sub(double num1, double num2) {
-    return num1 - num2;
+void listarIngresso() {
+    system("cls");
+
+    int x;
+
+    printf("\n******************\n");
+
+    printf("\nNome: %s", clientes[x].nome);
+    printf("\nCPF: %d", clientes[x].cpf);
+    printf("\nData Nascimento: %s\n", clientes[x].nascimento);
+
+    system("pause");
 }
 
-double multi(double num1, double num2) {
-    return num1 * num2;
-}
+void validarIngresso() {
+    system("cls");
 
-double div(double num1, double num2) {
-    if (num2 != 0) {
-        return num1 / num2;
-    } else {
-        printf("Erro: Divisao por zero nao e permitida.\n");
-        return 0;  //Ewvitar operação com valor inválido
+    int busca, x;
+    int achou = 0; // VariÃ¡vel para indicar se o CPF foi encontrado
+
+    printf("\nDigite o CPF da busca: ");
+    scanf("%d", &busca);
+
+    for (x = 0; x < codigo; x++) {
+        if (busca == clientes[x].cpf) {
+            printf("\n*********\n");
+            printf("\nNome: %s", clientes[x].nome);
+            printf("\nCPF: %d", clientes[x].cpf);
+            printf("\nNascimento: %s\n", clientes[x].nascimento);
+
+            achou = 1;
+            break;
+        }
     }
+
+    if (achou == 0) {
+        printf("\nCadastro nÃ£o encontrado\n");
+    }
+
+    system("pause");
+}
+
+void menu() {
+    printf("\na) Vender ingressos\n");
+    printf("b) Listar ingressos\n");
+    printf("c) Validar ingressos\n");
+    printf("d) Sair\n");
+    printf("\nOpÃ§Ã£o: ");
 }
 
 int main() {
-    int op;
-    double num1, num2;
-    bool sair = false;
+    setlocale(LC_ALL, "Portuguese");
+
+    char op;
 
     do {
-        printf("\nDigite dois valores: ");
-        scanf("%lf %lf", &num1, &num2);
+        system("cls");
 
-        printf("\nSelecione a operacao:");
-        printf("\n1 - soma\n2 - subtracao\n3 - multiplicacao\n4 - divisao\n0 - sair\n");
-        printf("Opcao: ");
-        scanf("%d", &op);
+        menu();
+
+        fflush(stdin);
+        scanf("%c", &op);
 
         switch (op) {
-            case 1:
-                printf("Resultado: %.21f\n", soma(num1, num2));
+            case 'a':
+                venderIngresso();
                 break;
-            case 2:
-                printf("Resultado: %.21f\n", sub(num1, num2));
+            case 'b':
+                listarIngresso();
                 break;
-            case 3:
-                printf("Resultado: %.21f\n", multi(num1, num2));
+            case 'c':
+                validarIngresso();
                 break;
-            case 4:
-                printf("Resultado: %.21f\n", div(num1, num2));
-                break;
-            case 0:
-                printf("\nEncerrando a aplicacao.\n");
-                sair = true;
+            case 'd':
+                printf("\nSaindo!\n");
+                system("pause");
                 break;
             default:
-                printf("\nOpcao invalida!\n");
+                printf("\nOpÃ§Ã£o invÃ¡lida\n");
+                system("pause");
                 break;
         }
-
-        system("pause");  //entrada do usuário
-    } while (!sair);
+    } while (op != 'd');
 
     return 0;
 }
-
