@@ -1,0 +1,37 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+double solve(int n1, int n2, int at);
+
+int main() {
+    double prob;
+    int ev1, ev2, at, d, tmp;
+
+    while (cin >> ev1 >> ev2 >> at >> d, ev1 && ev2 && at && d) {
+        tmp = ev1;
+        ev1 = 0;
+        while (tmp > 0)
+            tmp -= d, ++ev1;
+
+        tmp = ev2;
+        ev2 = 0;
+        while (tmp > 0)
+            tmp -= d, ++ev2;
+
+        prob = solve(ev1, ev2, at);
+        cout << fixed << setprecision(1) << prob * 100 << endl;
+    }
+
+    return 0;
+}
+
+double solve(int n1, int n2, int at) {
+    if (at == 3)
+        return static_cast<double>(n1) / (n1 + n2);
+    else {
+        double p = 1.0 - (6 - at) / 6.0;
+        p = (1 - p) / p;
+        return (1.0 - pow(p, n1)) / (1.0 - pow(p, n1 + n2));
+    }
+}
