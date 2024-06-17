@@ -1,0 +1,325 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+public class Aluno
+{
+    public string Nome { get; set; }
+    public List<double> Notas { get; set; }
+
+    public Aluno(string nome)
+    {
+        Nome = nome;
+        Notas = new List<double>();
+    }
+
+    public void AdicionarNota(double nota)
+    {
+        Notas.Add(nota);
+    }
+
+    public double CalcularMedia()
+    {
+        if (Notas.Count == 0)
+            return 0;
+
+        double soma = 0;
+        foreach (var nota in Notas)
+        {
+            soma += nota;
+        }
+        return soma / Notas.Count;
+    }
+
+    public string Situacao()
+    {
+        double media = CalcularMedia();
+
+        if (media >= 7.0)
+        {
+            return "Aprovado";
+        }
+        else if (media <= 4.0)
+        {
+            return "Reprovado";
+        }
+        else
+        {
+            return "Recuperação";
+        }
+    }
+
+    public override string ToString()
+    {
+        return $"Nome: {Nome}, Média: {CalcularMedia():F2}, Situação: {Situacao()}";
+    }
+}
+
+public class Program
+{
+    private static List<Aluno> alunos = new List<Aluno>();
+
+    public static void Main()
+    {
+        bool sair = false;
+
+        while (!sair)
+        {
+            Console.WriteLine("\n===== Menu Principal =====");
+            Console.WriteLine("1. Cadastrar Aluno");
+            Console.WriteLine("2. Editar Aluno");
+            Console.WriteLine("3. Excluir Aluno");
+            Console.WriteLine("4. Buscar Aluno");
+            Console.WriteLine("5. Listar Alunos");
+            Console.WriteLine("6. Listar Alunos Aprovados");
+            Console.WriteLine("7. Listar Alunos Reprovados");
+            Console.WriteLine("8. Salvar Dados em Arquivo");
+            Console.WriteLine("9. Carregar Dados de Arquivo");
+            Console.WriteLine("0. Sair");
+
+            Console.Write("Escolha uma opção: ");
+            string opcao = Console.ReadLine();
+
+            switch (opcao)
+            {
+                case "1":
+                    CadastrarAluno();
+                    break;
+                case "2":
+                    EditarAluno();
+                    break;
+                case "3":
+                    ExcluirAluno();
+                    break;
+                case "4":
+                    BuscarAluno();
+                    break;
+                case "5":
+                    ListarAlunos();
+                    break;
+                case "6":
+                    ListarAprovados();
+                    break;
+                case "7":
+                    ListarReprovados();
+                    break;
+                case "8":
+                    SalvarEmArquivo();
+                    break;
+                case "9":
+                    CarregarDeArquivo();
+                    break;
+                case "0":
+                    sair = true;
+                    break;
+                default:
+                    Console.WriteLine("Opção inválida. Escolha novamente.");
+                    break;
+            }
+        }
+
+        Console.WriteLine("Encerrando o programa...");
+    }
+
+    private static void CadastrarAluno()
+    {
+        Console.Write("Digite o nome do aluno: ");
+        string nome = Console.ReadLine();
+
+        Aluno aluno = new Aluno(nome);
+
+        bool continuar = true;
+        while (continuar)
+        {
+            Console.Write("Digite a nota do aluno (ou 'fim' para parar): ");
+            string notaStr = Console.ReadLine();
+
+            if (notaStr.ToLower() == "fim")
+            {
+                continuar = false;
+            }
+            else
+            {
+                if (double.TryParse(notaStr, out double nota))
+                {
+                    aluno.AdicionarNota(nota);
+                }
+                else
+                {
+                    Console.WriteLine("Nota inválida. Digite novamente.");
+                }
+            }
+        }
+
+        alunos.Add(aluno);
+        Console.WriteLine("Aluno cadastrado com sucesso.");
+    }
+
+    private static void EditarAluno()
+    {
+        Console.Write("Digite o nome do aluno que deseja editar: ");
+        string nome = Console.ReadLine();
+
+        Aluno alunoEncontrado = alunos.Find(a => a.Nome.ToLower() == nome.ToLower());
+
+        if (alunoEncontrado != null)
+        {
+            Console.WriteLine($"Aluno encontrado: {alunoEncontrado.Nome}");
+
+            bool continuar = true;
+            while (continuar)
+            {
+                Console.Write("Digite a nova nota do aluno (ou 'fim' para parar): ");
+                string notaStr = Console.ReadLine();
+
+                if (notaStr.ToLower() == "fim")
+                {
+                    continuar = false;
+                }
+                else
+                {
+                    if (double.TryParse(notaStr, out double novaNota))
+                    {
+                        alunoEncontrado.AdicionarNota(novaNota);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Nota inválida. Digite novamente.");
+                    }
+                }
+            }
+
+            Console.WriteLine("Aluno editado com sucesso.");
+        }
+        else
+        {
+            Console.WriteLine("Aluno não encontrado.");
+        }
+    }
+
+    private static void ExcluirAluno()
+    {
+        Console.Write("Digite o nome do aluno que deseja excluir: ");
+        string nome = Console.ReadLine();
+
+        Aluno alunoEncontrado = alunos.Find(a => a.Nome.ToLower() == nome.ToLower());
+
+        if (alunoEncontrado != null)
+        {
+            alunos.Remove(alunoEncontrado);
+            Console.WriteLine("Aluno excluído com sucesso.");
+        }
+        else
+        {
+            Console.WriteLine("Aluno não encontrado.");
+        }
+    }
+
+    private static void BuscarAluno()
+    {
+        Console.Write("Digite o nome do aluno que deseja buscar: ");
+        string nome = Console.ReadLine();
+
+        Aluno alunoEncontrado = alunos.Find(a => a.Nome.ToLower() == nome.ToLower());
+
+        if (alunoEncontrado != null)
+        {
+            Console.WriteLine(alunoEncontrado.ToString());
+        }
+        else
+        {
+            Console.WriteLine("Aluno não encontrado.");
+        }
+    }
+
+    private static void ListarAlunos()
+    {
+        Console.WriteLine("\n===== Listagem de Alunos =====");
+        foreach (var aluno in alunos)
+        {
+            Console.WriteLine(aluno.ToString());
+        }
+    }
+
+    private static void ListarAprovados()
+    {
+        Console.WriteLine("\n===== Alunos Aprovados =====");
+        foreach (var aluno in alunos)
+        {
+            if (aluno.Situacao() == "Aprovado")
+            {
+                Console.WriteLine(aluno.ToString());
+            }
+        }
+    }
+
+    private static void ListarReprovados()
+    {
+        Console.WriteLine("\n===== Alunos Reprovados =====");
+        foreach (var aluno in alunos)
+        {
+            if (aluno.Situacao() == "Reprovado")
+            {
+                Console.WriteLine(aluno.ToString());
+            }
+        }
+    }
+
+    private static void SalvarEmArquivo()
+    {
+        Console.Write("Digite o nome do arquivo para salvar (ex: alunos.txt): ");
+        string nomeArquivo = Console.ReadLine();
+
+        using (StreamWriter writer = new StreamWriter(nomeArquivo))
+        {
+            foreach (var aluno in alunos)
+            {
+                writer.WriteLine($"{aluno.Nome};{string.Join(" ", aluno.Notas)}");
+            }
+        }
+
+        Console.WriteLine("Dados salvos em arquivo com sucesso.");
+    }
+
+    private static void CarregarDeArquivo()
+    {
+        Console.Write("Digite o nome do arquivo para carregar (ex: alunos.txt): ");
+        string nomeArquivo = Console.ReadLine();
+
+        if (File.Exists(nomeArquivo))
+        {
+            alunos.Clear();
+
+            using (StreamReader reader = new StreamReader(nomeArquivo))
+            {
+                string linha;
+                while ((linha = reader.ReadLine()) != null)
+                {
+                    string[] partes = linha.Split(';');
+                    string nome = partes[0];
+                    List<double> notas = new List<double>();
+
+                    if (partes.Length > 1)
+                    {
+                        string[] notasStr = partes[1].Split(' ');
+                        foreach (var notaStr in notasStr)
+                        {
+                            if (double.TryParse(notaStr, out double nota))
+                            {
+                                notas.Add(nota);
+                            }
+                        }
+                    }
+
+                    alunos.Add(new Aluno(nome) { Notas = notas });
+                }
+            }
+
+            Console.WriteLine("Dados carregados do arquivo com sucesso.");
+        }
+        else
+        {
+            Console.WriteLine("Arquivo não encontrado.");
+        }
+    }
+}
