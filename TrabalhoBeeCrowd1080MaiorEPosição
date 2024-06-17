@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main(void) {
+    int n,i=1,maior=0,pos;
+    srand(time(NULL));
+    while(i<=100)
+    {
+        n=rand()&501;
+        if(n>maior)
+        {
+            maior=n;
+            pos=i;
+        }
+        i++;
+    }
+    printf("%d\n%d\n",maior,pos);
+
+    return 0;
+}
