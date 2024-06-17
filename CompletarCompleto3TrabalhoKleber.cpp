@@ -1,95 +1,167 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h> // Para usar a fun√ß√£o gets
 
-// Estrutura cliente
-struct cliente {
-    int cpf;
-    char nascimento[50];
+struct produto {
+    int codigo;
+    char descricao[50];
+    double preco;
+    int estoque;
 };
 
-// vetor de clientes
-struct cliente clientes[200];
+struct produto p[200];
+int seq = 0, vd = 0;
+double vendas[200];
 
-// Vari·vel global para controlar o n˙mero de clientes registrados
-int codigo = 0;
-
-// FunÁ„o para vender ingresso
-void venderIngresso() {
+void menu() {
     system("cls");
-
-    printf("\nDigite o nome: ");
-    fflush(stdin);
-    gets(clientes[codigo].nome); // Corrigido para armazenar o nome do cliente
-
-    printf("\nDigite o CPF: ");
-    scanf("%i", &clientes[codigo].cpf);
-
-    printf("\nDigite a data de nascimento: ");
-    fflush(stdin);
-    gets(clientes[codigo].nascimento);
-
-    printf("\nIngresso vendido com sucesso!\n");
-    system("pause");
-
-    codigo++; // cÛdigo para o prÛximo cliente
+    printf("\nDigite a op√ß√£o desejada\n");
+    printf("1 - Cadastro de produtos\n");
+    printf("2 - Vendas realizadas\n");
+    printf("3 - Relat√≥rio de vendas\n");
+    printf("4 - Gerenciamento de estoque\n");
+    printf("5 - Sair\n");
+    printf("Op√ß√£o: ");
 }
 
-// FunÁ„o para listar ingressos vendidos
-void listarIngresso() {
+void cadastro() {
     system("cls");
 
-    printf("\n******************\n");
+    p[seq].codigo = seq + 1;
 
-    for (int x = 0; x < codigo; x++) {
-        printf("\nNome: %s", clientes[x].nome);
-        printf("\nCPF: %i", clientes[x].cpf);
-        printf("\nData Nascimento: %s\n", clientes[x].nascimento);
-        printf("\n******************\n");
+    printf("\nDigite o nome do produto: ");
+    fflush(stdin);
+    gets(p[seq].descricao);
+
+    printf("\nDigite o pre√ßo do produto: ");
+    scanf("%lf", &p[seq].preco);
+
+    printf("\nDigite o estoque inicial: ");
+    scanf("%d", &p[seq].estoque);
+
+    seq++;
+}
+
+void venda() {
+    char resp;
+    int cod, cont, qtde, existe = 0;
+    double valorTotal = 0;
+
+    do {
+        system("cls");
+        printf("\nDigite o c√≥digo do produto: ");
+        scanf("%d", &cod);
+
+        for (cont = 0; cont < seq; cont++) {
+            if (cod == p[cont].codigo) {
+                printf("\nProduto: %s\n", p[cont].descricao);
+                printf("Estoque: %d\n", p[cont].estoque);
+
+                printf("Digite a quantidade: ");
+                scanf("%d", &qtde);
+
+                if (qtde <= p[cont].estoque && qtde > 0) {
+                    p[cont].estoque -= qtde;
+                    valorTotal += qtde * p[cont].preco;
+                    existe = 1;
+                } else {
+                    printf("Quantidade inv√°lida ou estoque insuficiente!\n");
+                    existe = 0;
+                }
+
+                printf("\nDeseja mais algum produto? (s-sim / n-n√£o): ");
+                fflush(stdin);
+                scanf("%c", &resp);
+                break;
+            }
+        }
+
+        if (!existe) {
+            printf("\nProduto n√£o cadastrado!\n");
+            system("pause");
+        }
+
+    } while (resp != 'n');
+
+    printf("\nO valor total da venda √©: R$ %.2f\n", valorTotal);
+    vendas[vd] = valorTotal;
+    vd++;
+    system("pause");
+}
+
+void relatorio() {
+    int x;
+    system("cls");
+    printf("\nRelat√≥rio de Vendas\n");
+
+    for (x = 0; x < vd; x++) {
+        printf("\n*********************\n");
+        printf("Venda n¬∫ %d\n", x + 1);
+        printf("Valor: R$ %.2f\n", vendas[x]);
     }
 
     system("pause");
 }
 
+void gerenciamento() {
+    int codp, qtde, y;
 
-void validarIngresso() {
-  //ajuda gpt >>
+    system("cls");
+    printf("\nGerenciamento de Estoque\n");
+
+    printf("\nDigite o c√≥digo do produto para gerenciar o estoque: ");
+    scanf("%d", &codp);
+
+    for (y = 0; y < seq; y++) {
+        if (codp == p[y].codigo) {
+            printf("\nProduto: %s\n", p[y].descricao);
+            printf("Estoque atual: %d\n", p[y].estoque);
+
+            printf("\nDigite a quantidade para atualizar o estoque (ou 0 para sair): ");
+            scanf("%d", &qtde);
+
+            if (qtde != 0) {
+                p[y].estoque += qtde;
+                printf("Estoque atualizado com sucesso!\n");
+            }
+
+            break;
+        }
+    }
+
+    system("pause");
+}
 
 int main() {
     setlocale(LC_ALL, "Portuguese");
 
-    int opcao;
+    int op = 0;
 
-    do {
-        system("cls");
+    while (op != 5) {
+        menu();
+        scanf("%d", &op);
 
-        printf("\n******************\n");
-        printf("\n1 - Vender Ingresso\n");
-        printf("2 - Listar Ingressos Vendidos\n");
-        printf("3 - Validar Ingresso\n");
-        printf("0 - Sair\n");
-        printf("\nDigite a opÁ„o desejada: ");
-        scanf("%d", &opcao);
-
-        switch (opcao) {
+        switch (op) {
             case 1:
-                venderIngresso();
+                cadastro();
                 break;
             case 2:
-                listarIngresso();
+                venda();
                 break;
             case 3:
-                validarIngresso();
+                relatorio();
                 break;
-            case 0:
-                printf("\nEncerrando o programa...\n");
+            case 4:
+                gerenciamento();
+                break;
+            case 5:
+                printf("\nSaindo da aplica√ß√£o\n");
                 break;
             default:
-                printf("\nOpÁ„o inv·lida! Tente novamente.\n");
+                printf("\nOp√ß√£o inv√°lida!\n");
                 break;
         }
-
-    } while (opcao != 0);
+    }
 
     return 0;
 }
-
