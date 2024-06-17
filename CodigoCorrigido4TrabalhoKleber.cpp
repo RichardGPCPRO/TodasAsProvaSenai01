@@ -7,19 +7,19 @@ int main() {
 
     srand(time(NULL));  // Numero aleatorio
 
-    // Gerar os números
+    // Gerar os nÃºmeros
     for (linha = 0; linha < 10; linha++) {
         for (coluna = 0; coluna < 6; coluna++) {
             numeros[linha][coluna] = 1 + rand() % 60;
         }
 
-        // Garantir que os números são únicos na linha exemplo gpt 
+        // Garantir que os nÃºmeros sÃ£o Ãºnicos na linha exemplo gpt 
         for (coluna = 0; coluna < 6; coluna++) {
             apoio = 0;
             while (apoio < coluna) {
                 if (numeros[linha][apoio] == numeros[linha][coluna]) {
                     numeros[linha][coluna] = 1 + rand() % 60;
-                    apoio = 0;  // Reinicia a verificação desde o início
+                    apoio = 0;  // Reinicia a verificaÃ§Ã£o desde o inÃ­cio
                 } else {
                     apoio++;
                 }
@@ -27,10 +27,10 @@ int main() {
         }
     }
 
-    // Imprimir os números
+    // Imprimir os nÃºmeros
     for (linha = 0; linha < 10; linha++) {
         for (coluna = 0; coluna < 6; coluna++) {
-            printf("[%2d] ", numeros[linha][coluna]);  //Para dois dígitos
+            printf("[%2d] ", numeros[linha][coluna]);  //Para dois dÃ­gitos
         }
         printf("\n");
     }
