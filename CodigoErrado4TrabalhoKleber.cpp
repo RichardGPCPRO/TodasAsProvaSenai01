@@ -2,7 +2,7 @@
 
 #include<stdlib.h> // Inclui a biblioteca stdlib.h
 
-para usar a função system
+para usar a funÃ§Ã£o system
 
 double soma (double num1, double num2){
 
